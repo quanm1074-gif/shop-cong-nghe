@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MinhQuan Tech - Điện Thoại, Laptop & Phụ Kiện</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+
+  <!-- Thanh điều hướng (Header) -->
+  <header class="bg-white shadow-sm sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-4 py-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+          <i class="fa-solid fa-microchip text-indigo-600 text-2xl"></i>
+          <span class="text-xl font-extrabold text-gray-900 tracking-tight">MinhQuan <span class="text-indigo-600">Tech</span></span>
+        </div>
+
+        <!-- Ô tìm kiếm trên máy tính -->
+        <div class="hidden md:flex flex-1 max-w-md mx-8">
+          <input id="searchInputDesktop" oninput="syncSearch(this.value)" type="text" placeholder="Tìm điện thoại, laptop, phụ kiện..." 
+            class="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+        </div>
+
+        <!-- Nút Giỏ hàng -->
+        <button onclick="toggleCart()" class="relative p-2 text-gray-700 hover:text-indigo-600 transition flex items-center space-x-1 bg-indigo-50 px-3 py-2 rounded-full">
+          <i class="fa-solid fa-cart-shopping text-lg text-indigo-600"></i>
+          <span class="text-sm font-semibold text-indigo-600 hidden sm:inline">Giỏ hàng</span>
+          <span id="cartCount" class="bg-red-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">0</span>
+        </button>
+      </div>
+
+      <!-- Ô tìm kiếm trên điện thoại -->
+      <div class="mt-3 md:hidden">
+        <input id="searchInputMobile" oninput="syncSearch(this.value)" type="text" placeholder="Tìm kiếm iPhone, Xiaomi, Laptop..." 
+          class="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+      </div>
+    </div>
+  </header>
+
+  <!-- Banner chính (Hero) -->
+  <section class="bg-gradient-to-r from-indigo-700 via-indigo-600 to-blue-600 text-white py-10 px-4">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between">
+      <div class="mb-6 md:mb-0 md:w-2/3">
+        <span class="bg-yellow-400 text-gray-900 text-xs uppercase tracking-wider px-3 py-1 rounded-full font-extrabold">Siêu Sale Công Nghệ</span>
+        <h1 class="text-3xl md:text-5xl font-extrabold mt-3 mb-3">Điện Thoại & Laptop Chính Hãng Giá Rẻ</h1>
+        <p class="text-indigo-100 mb-6 text-sm md:text-base">Bảo hành 12 tháng, lỗi 1 đổi 1 trong 30 ngày. Hỗ trợ trả góp 0% và giao hàng kiểm tra tận nơi toàn quốc.</p>
+        <a href="#product-section" class="inline-block bg-white text-indigo-700 font-bold px-6 py-3 rounded-full shadow hover:bg-gray-100 transition text-sm">Xem ưu đãi ngay</a>
+      </div>
+      <div class="text-6xl md:text-8xl opacity-90 flex space-x-4">
+        <i class="fa-solid fa-mobile-screen-button"></i>
+        <i class="fa-solid fa-laptop-code"></i>
+      </div>
+    </div>
+  </section>
+
+  <!-- Danh mục & Danh sách sản phẩm -->
+  <main id="product-section" class="max-w-6xl mx-auto px-4 py-8">
+    <!-- Bộ lọc danh mục -->
+    <div class="flex items-center gap-2 overflow-x-auto pb-3 mb-6" id="categoryButtons">
+      <button onclick="filterCategory('all', this)" class="cat-btn whitespace-nowrap bg-indigo-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-sm transition">
+        Tất cả (16)
+      </button>
+      <button onclick="filterCategory('Điện thoại', this)" class="cat-btn whitespace-nowrap bg-white text-gray-700 border px-4 py-2 rounded-full text-sm font-semibold hover:bg-gray-50 transition">
+        <i class="fa-solid fa-mobile-screen mr-1"></i> Điện thoại
+      </button>
+      <button onclick="filterCategory('Laptop & PC', this)" class="cat-btn whitespace-nowrap bg-white text-gray-700 border px-4 py-2 rounded-full text-sm font-semibold hover:bg-gray-50 transition">
+        <i class="fa-solid fa-laptop mr-1"></i> Laptop & Máy tính
+      </button>
+      <button onclick="filterCategory('Máy tính bảng', this)" class="cat-btn whitespace-nowrap bg-white text-gray-700 border px-4 py-2 rounded-full text-sm font-semibold hover:bg-gray-50 transition">
+        <i class="fa-solid fa-tablet-screen-button mr-1"></i> Máy tính bảng
+      </button>
+      <button onclick="filterCategory('Phụ kiện', this)" class="cat-btn whitespace-nowrap bg-white text-gray-700 border px-4 py-2 rounded-full text-sm font-semibold hover:bg-gray-50 transition">
+        <i class="fa-solid fa-headphones mr-1"></i> Phụ kiện & Gear
+      </button>
+    </div>
+
+    <!-- Lưới hiển thị sản phẩm -->
+    <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6"></div>
+  </main>
+
+  <!-- Ngăn kéo Giỏ hàng & Đặt hàng -->
+  <div id="cartModal" class="fixed inset-0 bg-black/50 z-50 hidden flex justify-end">
+    <div class="bg-white w-full max-w-md h-full flex flex-col justify-between p-5 overflow-y-auto">
+      <div>
+        <div class="flex items-center justify-between border-b pb-4">
+          <h2 class="text-xl font-bold"><i class="fa-solid fa-bag-shopping text-indigo-600 mr-2"></i>Giỏ hàng của bạn</h2>
+          <button onclick="toggleCart()" class="text-gray-500 hover:text-red-500 text-2xl">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <!-- Danh sách món trong giỏ -->
+        <div id="cartItems" class="py-4 space-y-3 max-h-64 overflow-y-auto"></div>
+      </div>
+
+      <!-- Biểu mẫu thanh toán -->
+      <div class="border-t pt-4">
+        <div class="flex justify-between text-lg font-bold mb-4">
+          <span>Tổng thanh toán:</span>
+          <span id="cartTotal" class="text-red-600 text-xl">0đ</span>
+        </div>
+
+        <form onsubmit="submitOrder(event)" class="space-y-3">
+          <input id="custName" required type="text" placeholder="Họ và tên người nhận" class="w-full px-3 py-2 border rounded-lg text-sm">
+          <input id="custPhone" required type="tel" placeholder="Số điện thoại liên hệ" class="w-full px-3 py-2 border rounded-lg text-sm">
+          <input id="custAddress" required type="text" placeholder="Địa chỉ nhận hàng chi tiết" class="w-full px-3 py-2 border rounded-lg text-sm">
+          <select id="custPayment" class="w-full px-3 py-2 border rounded-lg text-sm bg-white">
+            <option value="Thanh toán khi nhận hàng (COD)">Thanh toán khi nhận hàng (COD)</option>
+            <option value="Chuyển khoản ngân hàng">Chuyển khoản ngân hàng (VietQR)</option>
+          </select>
+          <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg shadow transition">
+            ĐẶT HÀNG NGAY
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chân trang (Footer) -->
+  <footer class="bg-gray-900 text-gray-400 py-8 text-center text-sm mt-12">
+    <p class="font-bold text-white text-base mb-1">MinhQuan Tech - Hệ thống Điện thoại & Máy tính</p>
+    <p>Bảo hành uy tín | Hỗ trợ kỹ thuật 24/7 | Giao hàng toàn quốc</p>
+  </footer>
+
+  <!-- Mã xử lý dữ liệu sản phẩm và giỏ hàng -->
+  <script>
+    // =========================================================
+    // DANH SÁCH 16 SẢN PHẨM ĐIỆN THOẠI, MÁY TÍNH & PHỤ KIỆN
+    // =========================================================
+    const products = [
+      // --- ĐIỆN THOẠI ---
+      {
+        id: 1,
+        name: "iPhone 16 Pro Max 256GB VN/A",
+        specs: "8GB/256GB • Titan Tự Nhiên",
+        price: 31990000,
+        oldPrice: 34990000,
+        category: "Điện thoại",
+        image: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=500&q=80"
+      },
+      {
+        id: 2,
+        name: "Samsung Galaxy S24 Ultra 5G",
+        specs: "12GB/256GB • Màn 120Hz",
+        price: 25490000,
+        oldPrice: 29990000,
+        category: "Điện thoại",
+        image: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=500&q=80"
+      },
+      {
+        id: 3,
+        name: "Xiaomi 14 Ultra 5G Chính Hãng",
+        specs: "16GB/512GB • Camera Leica",
+        price: 23990000,
+        oldPrice: 27990000,
+        category: "Điện thoại",
+        image: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=500&q=80"
+      },
+      {
+        id: 4,
+        name: "Xiaomi Redmi Note 13 Pro 5G",
+        specs: "8GB/256GB • Sạc nhanh 67W",
+        price: 6890000,
+        oldPrice: 8290000,
+        category: "Điện thoại",
+        image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500&q=80"
+      },
+      {
+        id: 5,
+        name: "iPhone 15 128GB Chính Hãng",
+        specs: "6GB/128GB • Dynamic Island",
+        price: 18690000,
+        oldPrice: 21990000,
+        category: "Điện thoại",
+        image: "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=500&q=80"
+      },
+      {
+        id: 6,
+        name: "iPhone 13 128GB Likenew 99%",
+        specs: "Pin 95%+ • Bảo hành 12T",
+        price: 10990000,
+        oldPrice: 12900000,
+        category: "Điện thoại",
+        image: "https://images.unsplash.com/photo-1632661674596-df8be070a5c5?w=500&q=80"
+      },
+
+      // --- LAPTOP & MÁY TÍNH ---
+      {
+        id: 7,
+        name: "MacBook Air M3 13 inch 2024",
+        specs: "RAM 16GB • SSD 256GB",
+        price: 26990000,
+        oldPrice: 29990000,
+        category: "Laptop & PC",
+        image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500&q=80"
+      },
+      {
+        id: 8,
+        name: "Laptop Gaming ASUS ROG Strix G16",
+        specs: "i7-13650HX • RTX 4060 • 165Hz",
+        price: 31490000,
+        oldPrice: 35990000,
+        category: "Laptop & PC",
+        image: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=500&q=80"
+      },
+      {
+        id: 9,
+        name: "Laptop Gaming Acer Nitro 5 Tiger",
+        specs: "i5-12500H • RTX 3050 • 144Hz",
+        price: 17990000,
+        oldPrice: 21490000,
+        category: "Laptop & PC",
+        image: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=500&q=80"
+      },
+      {
+        id: 10,
+        name: "Bộ PC Gaming Full LED RGB Chiến Game",
+        specs: "i5-13400F • RAM 16GB • RTX 4060",
+        price: 16500000,
+        oldPrice: 19200000,
+        category: "Laptop & PC",
+        image: "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=500&q=80"
+      },
+      {
+        id: 11,
+        name: "Laptop Văn Phòng Dell Inspiron 15",
+        specs: "Core i5 • RAM 16GB • SSD 512GB",
+        price: 13890000,
+        oldPrice: 15990000,
+        category: "Laptop & PC",
+        image: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=500&q=80"
+      },
+      {
+        id: 12,
+        name: "Màn Hình Gaming LG UltraGear 27 inch",
+        specs: "IPS Full HD • 180Hz • 1ms",
+        price: 3890000,
+        oldPrice: 4690000,
+        category: "Laptop & PC",
+        image: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=500&q=80"
+      },
+
+      // --- MÁY TÍNH BẢNG ---
+      {
+        id: 13,
+        name: "iPad Air 6 M2 11 inch WiFi",
+        specs: "8GB/128GB • Chip Apple M2",
+        price: 15490000,
+        oldPrice: 16990000,
+        category: "Máy tính bảng",
+        image: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=500&q=80"
+      },
+      {
+        id: 14,
+        name: "Xiaomi Pad 6 Chính Hãng",
+        specs: "8GB/256GB • Màn 2.8K 144Hz",
+        price: 7690000,
+        oldPrice: 8990000,
+        category: "Máy tính bảng",
+        image: "https://images.unsplash.com/photo-1585790050230-5dd28404ccb9?w=500&q=80"
+      },
+
+      // --- PHỤ KIỆN & GAMING GEAR ---
+      {
+        id: 15,
+        name: "Tai Nghe Bluetooth AirPods Pro 2",
+        specs: "Chống ồn chủ động • Sạc USB-C",
+        price: 5490000,
+        oldPrice: 6190000,
+        category: "Phụ kiện",
+        image: "https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=500&q=80"
+      },
+      {
+        id: 16,
+        name: "Combo Bàn Phím Cơ + Chuột Gaming RGB",
+        specs: "Blue Switch • Chuột 12000 DPI",
+        price: 790000,
+        oldPrice: 1150000,
+        category: "Phụ kiện",
+        image: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500&q=80"
+      }
+    ];
+
+    let cart = [];
+    let currentCategory = 'all';
+    let searchKeyword = '';
+
+    function formatVND(amount) {
+      return amount.toLocaleString('vi-VN') + 'đ';
+    }
+
+    function syncSearch(val) {
+      searchKeyword = val.toLowerCase();
+      document.getElementById('searchInputDesktop').value = val;
+      document.getElementById('searchInputMobile').value = val;
+      renderProducts();
+    }
+
+    function renderProducts() {
+      const grid = document.getElementById('productGrid');
+      const filtered = products.filter(p => {
+        const matchCat = currentCategory === 'all' || p.category === currentCategory;
+        const matchSearch = p.name.toLowerCase().includes(searchKeyword) || p.specs.toLowerCase().includes(searchKeyword);
+        return matchCat && matchSearch;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500">Không tìm thấy sản phẩm phù hợp.</div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(p => {
+        const discount = Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100);
+        return `
+        <div class="bg-white rounded-2xl shadow-sm hover:shadow-md transition overflow-hidden flex flex-col justify-between border border-gray-100 relative">
+          <div>
+            <span class="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-lg">-${discount}%</span>
+            <img src="${p.image}" alt="${p.name}" class="w-full h-40 sm:h-48 object-cover">
+            <div class="p-3 sm:p-4">
+              <span class="text-[11px] text-indigo-600 font-bold uppercase">${p.category}</span>
+              <h3 class="font-bold text-gray-900 text-sm sm:text-base mt-0.5 line-clamp-2">${p.name}</h3>
+              <p class="text-xs text-gray-500 bg-gray-100 inline-block px-2 py-0.5 rounded mt-1.5">${p.specs}</p>
+            </div>
+          </div>
+          <div class="p-3 sm:p-4 pt-0">
+            <div class="mb-2">
+              <span class="text-base sm:text-lg font-extrabold text-red-600 block">${formatVND(p.price)}</span>
+              <span class="text-xs text-gray-400 line-through">${formatVND(p.oldPrice)}</span>
+            </div>
+            <button onclick="addToCart(${p.id})" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-xl text-xs sm:text-sm font-bold transition">
+              <i class="fa-solid fa-cart-plus mr-1"></i> Thêm vào giỏ
+            </button>
+          </div>
+        </div>
+      `}).join('');
+    }
+
+    function filterCategory(cat, btnElement) {
+      currentCategory = cat;
+      const buttons = document.querySelectorAll('.cat-btn');
+      buttons.forEach(btn => {
+        btn.className = "cat-btn whitespace-nowrap bg-white text-gray-700 border px-4 py-2 rounded-full text-sm font-semibold hover:bg-gray-50 transition";
+      });
+      btnElement.className = "cat-btn whitespace-nowrap bg-indigo-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-sm transition";
+      renderProducts();
+    }
+
+    function addToCart(id) {
+      const product = products.find(p => p.id === id);
+      const existing = cart.find(item => item.id === id);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ ...product, qty: 1 });
+      }
+      updateCartUI();
+    }
+
+    function changeQty(id, delta) {
+      const item = cart.find(i => i.id === id);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) {
+        cart = cart.filter(i => i.id !== id);
+      }
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      const countEl = document.getElementById('cartCount');
+      const itemsEl = document.getElementById('cartItems');
+      const totalEl = document.getElementById('cartTotal');
+
+      const totalQty = cart.reduce((sum, i) => sum + i.qty, 0);
+      const totalPrice = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+
+      countEl.textContent = totalQty;
+      totalEl.textContent = formatVND(totalPrice);
+
+      if (cart.length === 0) {
+        itemsEl.innerHTML = '<p class="text-gray-400 text-sm text-center py-6">Chưa có sản phẩm nào trong giỏ</p>';
+        return;
+      }
+
+      itemsEl.innerHTML = cart.map(i => `
+        <div class="flex items-center justify-between border-b pb-2">
+          <div class="flex-1 pr-2">
+            <p class="text-sm font-semibold">${i.name}</p>
+            <p class="text-xs text-red-600 font-bold">${formatVND(i.price)} x ${i.qty}</p>
+          </div>
+          <div class="flex items-center space-x-2">
+            <button onclick="changeQty(${i.id}, -1)" class="w-6 h-6 bg-gray-200 rounded text-xs font-bold">-</button>
+            <span class="text-sm font-medium">${i.qty}</span>
+            <button onclick="changeQty(${i.id}, 1)" class="w-6 h-6 bg-gray-200 rounded text-xs font-bold">+</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function toggleCart() {
+      const modal = document.getElementById('cartModal');
+      modal.classList.toggle('hidden');
+    }
+
+    function submitOrder(e) {
+      e.preventDefault();
+      if (cart.length === 0) {
+        alert('Bạn vui lòng chọn ít nhất 1 sản phẩm vào giỏ hàng nhé!');
+        return;
+      }
+      const name = document.getElementById('custName').value;
+      const phone = document.getElementById('custPhone').value;
+      const address = document.getElementById('custAddress').value;
+      const payment = document.getElementById('custPayment').value;
+      const total = document.getElementById('cartTotal').textContent;
+      const itemList = cart.map(i => `- ${i.name} (SL: ${i.qty})`).join('\n');
+
+      alert(`ĐẶT HÀNG THÀNH CÔNG!\n\nKhách hàng: ${name}\nSĐT: ${phone}\nĐịa chỉ: ${address}\nThanh toán: ${payment}\n\nSản phẩm đã đặt:\n${itemList}\n\nTổng cộng: ${total}`);
+      cart = [];
+      updateCartUI();
+      toggleCart();
+      e.target.reset();
+    }
+
+    renderProducts();
+    updateCartUI();
+  </script>
+</body>
+</html>
